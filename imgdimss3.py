@@ -7,7 +7,7 @@
 
 import sys
 import os
-from PIL import Image
+from PIL import Image, UnidentifiedImageError, ExifTags
 
 def main():
     # Check if the correct number of command-line arguments is provided
@@ -19,10 +19,17 @@ def main():
 
     # Check if the input file exists
     if not os.path.isfile(input_file):
-        print(f"Error: File '{input_file}' does not exist.")
+        print(f"Error: File '{input_file}' does not exist.", file=sys.stderr)
         sys.exit(1)
 
     output_file = "image_dimensions_output.txt"
+
+    exifOrientation = 0
+    # Header line: print(f"filename,width,height")
+    for thisKey in ExifTags.TAGS.keys():
+        if ExifTags.TAGS[thisKey]=='Orientation':
+            exifOrientation = thisKey
+            break
 
     try:
         with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
@@ -42,14 +49,19 @@ def main():
                 try:
                     with Image.open(image_path) as img:
                         width, height = img.size
-                        outfile.write(f"{os.path.basename(image_path)},{width},{height}\n")
+                        exif = img.getexif()
+                        orientation = exif.get(exifOrientation, 0)
+                        outfile.write(f"{os.path.basename(image_path)},{width},{height},{orientation}\n")
+                except UnidentifiedImageError as uiex:
+                    print(f"{f.name}: not an image file; skipping - {str(uiex)}", file=sys.stderr)
+                    continue
                 except Exception as e:
-                    outfile.write(f"{os.path.basename(image_path)}: Error - {str(e)}\n")
+                    print(f"{os.path.basename(image_path)}: Error - {str(e)}", file=sys.stderr)
 
         print(f"Output written to '{output_file}'")
 
     except Exception as e:
-        print(f"Error processing files: {str(e)}")
+        print(f"Error processing files: {str(e)}", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":

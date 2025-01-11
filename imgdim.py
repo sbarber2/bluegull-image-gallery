@@ -32,7 +32,7 @@ def main():
                 with Image.open(f) as img:
                     width, height = img.size
                     exif = img.getexif()
-                    orientation = exif.get(exifOrientation, 1)
+                    orientation = exif.get(exifOrientation, 0)
                     print(f"{f.name},{width},{height},{orientation}")
             except UnidentifiedImageError as uiex:
                 print(f"{f.name}: not an image file; skipping - {str(uiex)}", file=sys.stderr)
