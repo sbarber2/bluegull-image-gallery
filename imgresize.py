@@ -50,7 +50,7 @@ def main():
                                             img = img.rotate(90, expand=True)
                                         break
                         except AttributeError:
-                            print("No EXIF data found for orientation.")
+                            pass
 
                         width, height = img.size
                         # Check if the image width exceeds the maximum width
@@ -63,6 +63,7 @@ def main():
                             print(f"{image_path} {width}x{height} is within the size limit. No resizing needed.")
                         # Save the resized image to the output directory
                         img.save(output_file)
+                        img.close()
                 except Exception as e:
                     print(f"{os.path.basename(image_path)}: Error - {str(e)}\n")
 
