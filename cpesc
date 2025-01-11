@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+# copies a list of files from a file of pathnames, escaping the pathnames, to a specified directory
+# useful for filenames with spaces in them, etc.
+
+# Input file containing filenames
+input_file="$1"
+
+# Target directory where files will be copied
+target_dir="$2"
+
+# Create the target directory if it doesn't exist
+mkdir -p "$target_dir"
+
+# Read the file line by line and copy each file
+while IFS= read -r file; do
+  if [[ -e "$file" ]]; then
+#    cp -- "$file" "$target_dir"
+    echo "Copied: $file"
+  else
+    echo "File not found: $file"
+  fi
+done < "$input_file"
