@@ -1,12 +1,17 @@
+"""
+imglist.py: create a list of all img src attribute basenames in an XML document.
+             document doesn't have to be totally valid XML; that is HTML is fine.
+"""
+
 import sys
 from pathlib import Path
 from bs4 import BeautifulSoup
 
 html = ""
 
-# Enure a file path argument is provided
+# Ensure a file path argument is provided
 if len(sys.argv) < 2:
-    print("Usage: python script.py <path_to_html_file>")
+    print(f"Usage: python {sys.argv[0]} <path_to_html_file>")
     sys.exit(1)
 
 # Get the file path from the first argument
