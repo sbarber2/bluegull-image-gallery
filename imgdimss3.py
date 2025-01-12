@@ -9,6 +9,12 @@ import sys
 import os
 from PIL import Image, UnidentifiedImageError, ExifTags
 
+# if filename is in skipList, don't try to back-convert it. Yeah, these should be in an input file
+skipList = [
+    "6f782ab4-07d2-019e-4db0-d25ff3be5217.jpg",
+    "547fb874-a3d2-b800-d020-0da7b8548f35.jpg"
+]
+
 def main():
     # Check if the correct number of command-line arguments is provided
     if len(sys.argv) != 2:
@@ -42,7 +48,7 @@ def main():
                 # special case: no way to back convert this as a general pattern
                 if (image_path == 'Legends-of-Jazz-at-the-Cove-021-Copy.jpg'):
                     image_path = 'Legends of Jazz at the Cove 021 - Copy.JPG'
-                else:
+                elif not image_path in skipList:
                     image_path = image_path.replace('-', ' ')
                     image_path = image_path.replace(' scaled', '')
 
