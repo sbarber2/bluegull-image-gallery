@@ -53,7 +53,7 @@ def main():
                         orientation = exif.get(exifOrientation, 0)
                         outfile.write(f"{os.path.basename(image_path)},{width},{height},{orientation}\n")
                 except UnidentifiedImageError as uiex:
-                    print(f"{f.name}: not an image file; skipping - {str(uiex)}", file=sys.stderr)
+                    print(f"{image_path}: not an image file; skipping - {str(uiex)}", file=sys.stderr)
                     continue
                 except Exception as e:
                     print(f"{os.path.basename(image_path)}: Error - {str(e)}", file=sys.stderr)
