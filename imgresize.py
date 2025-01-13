@@ -44,10 +44,13 @@ def main():
                                         orientation = value
                                         if orientation == 3:  # Rotate 180°
                                             img = img.rotate(180, expand=True)
+                                            print(f"Resized {image_path} rotated 180")
                                         elif orientation == 6:  # Rotate 270° (90° clockwise)
                                             img = img.rotate(270, expand=True)
+                                            print(f"Resized {image_path} rotated 90 CW")
                                         elif orientation == 8:  # Rotate 90° (90° counterclockwise)
                                             img = img.rotate(90, expand=True)
+                                            print(f"Resized {image_path} rotated 90 CCW")
                                         break
                         except AttributeError:
                             pass
