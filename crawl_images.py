@@ -8,7 +8,7 @@ def generate_arrows(n):
     """Returns a string of '>' characters of length n."""
     return '>' * n
 
-def get_image_filenames(url, visited_urls, visited_images, level=0, verbose=False):
+def get_image_filenames(url, visited_urls, visited_images, level=0, verbose=False, fullurl=False):
     """
     Recursively crawls a website starting from the given URL,
     and prints filenames of all unique image files found.
@@ -46,7 +46,10 @@ def get_image_filenames(url, visited_urls, visited_images, level=0, verbose=Fals
             img_filename = img_url.split('/')[-1]
             if re.search(r'\.(jpg|jpeg|png|gif|bmp|webp)$', img_filename, re.IGNORECASE):
                 if img_filename not in visited_images:
-                    print(img_filename)
+                    if fullurl:
+                        print(img_url)
+                    else:
+                        print(img_filename)
                     visited_images.add(img_filename)
     
     # Find and follow links on the same host
@@ -55,15 +58,16 @@ def get_image_filenames(url, visited_urls, visited_images, level=0, verbose=Fals
         parsed_next_url = urlparse(next_url)
         
         if parsed_next_url.scheme != "webcal" and parsed_next_url.netloc == base_host:  # Stay within the same host
-            get_image_filenames(next_url, visited_urls, visited_images, level + 1, verbose)
+            get_image_filenames(next_url, visited_urls, visited_images, level + 1, verbose, fullurl)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or len(sys.argv) > 3:
-        print(f"Usage: {sys.argv[0]} <URL> [--verbose]", file=sys.stderr)
+        print(f"Usage: {sys.argv[0]} <URL> [--verbose --fullurl]", file=sys.stderr)
         sys.exit(1)
     
     start_url = sys.argv[1]
     verbose_flag = "--verbose" in sys.argv
+    fullurl_flag = "--fullurl" in sys.argv
     visited_urls = set()
     visited_images = set()
-    get_image_filenames(start_url, visited_urls, visited_images, verbose=verbose_flag)
+    get_image_filenames(start_url, visited_urls, visited_images, verbose=verbose_flag, fullurl=fullurl_flag)
